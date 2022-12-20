@@ -2,6 +2,9 @@
 
 # dependencies
 ./node_modules
+/node_modules
+./loanapp/node_modules
+./Server/node_modules
 /.pnp
 .pnp.js
 
