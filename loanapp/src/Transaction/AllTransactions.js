@@ -1,23 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { URL } from ".././Constants.js";
+import { getAllTransactions } from "../Functions";
 import "../CSS/App.css";
 
 function AllTransactions() {
-  const url = URL + "/AllTransactions";
   const [transactions, setTransactions] = useState([]);
 
-  const getAllTransactions = async () => {
-    try {
-      const response = await fetch(url);
-      const jsonData = await response.json();
-      setTransactions(jsonData);
-    } catch (error) {
-      console.error(error.message);
-    }
-  };
-
   useEffect(() => {
-    getAllTransactions();
+    const getTransactions = async () => {
+      setTransactions(await getAllTransactions());
+    };
+    getTransactions();
   }, []);
 
   return (

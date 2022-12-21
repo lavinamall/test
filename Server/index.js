@@ -44,6 +44,20 @@ app.get("/UserList/:id", async (req, res) => {
   }
 });
 
+app.post("/NewTransaction", async (req, res) => {
+  try {
+    const fd = req.body.formData;
+    const Interest = (fd.Amount * fd.Rate * fd.Month) / 100;
+    
+    const query = await pool.query(
+      "INSERT INTO UserTransactions (UserId,Duration_in_months,Principal,Rate,Interest,EndDate) VALUES ($1, $2, $3, $4, $5, $6)",
+      [fd.UserId, fd.Month, fd.Amount, fd.Rate, Interest, ]
+    );
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
 app.listen(PORT, () => {
   console.log("Your server is running on port:", PORT);
 });

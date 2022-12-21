@@ -1,23 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { URL } from ".././Constants.js";
+import { getAllUsers } from "../Functions.js";
 import "../CSS/App.css";
 
 function UserList() {
-  const url = URL + "/UserList";
   const [users, setUsers] = useState([]);
 
-  const getAllUsers = async () => {
-    try {
-      const response = await fetch(url);
-      const jsonData = await response.json();
-      setUsers(jsonData);
-    } catch (error) {
-      console.error(error.message);
-    }
-  };
-
   useEffect(() => {
-    getAllUsers();
+    const getUsers = async () => {
+      setUsers(await getAllUsers())
+    };
+    getUsers();
   }, []);
 
   return (

@@ -1,13 +1,8 @@
-@media screen and (min-width: 480px) {
-  .transCard {
-    width: 50%;
-  }
-}
-
 body {
   background-color: aliceblue;
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
-  color: #333333;
+  /* border: 1px solid black; */
+  /* font-family: Verdana, Geneva, Tahoma, sans-serif; */
+  /* color: #333333; */
   /* font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif */
 }
 
@@ -85,4 +80,8 @@ img {
   position: absolute;
   left: 35%;
   padding-top: 1%;
+}
+
+.btn-primary {
+  background-color: #7a64b4;
 }
