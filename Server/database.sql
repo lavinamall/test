@@ -1,12 +1,6 @@
 CREATE DATABASE LoanShark;
 
-CREATE TABLE Users(
-    UserId SERIAL PRIMARY KEY,
-    UserName VARCHAR(50) NOT NULL,
-    Mobile VARCHAR(10) NOT NULL,
-    Address VARCHAR(255),
-    Notes VARCHAR(1000)
-);
+̀
 
 SELECT * FROM Users;
 SELECT * FROM Users ORDER BY UserName ASC;
@@ -19,13 +13,14 @@ UPDATE USERS SET MOBILE='9314711168' WHERE USERID=1;
 
 CREATE TABLE UserTransactions(
     TransactionId SERIAL PRIMARY KEY,
-    UserId INT,
+    UserId INT NOT NULL,
     StartDate DATE NOT NULL DEFAULT CURRENT_DATE,
     Duration_in_months NUMERIC(5,0),
     EndDate DATE,
-    Principal NUMERIC(18,0),
-    Interest NUMERIC(18,0),
-    Rate NUMERIC(3,0),
+    Principal NUMERIC(18,0) NOT NULL,
+    Interest NUMERIC(18,2),
+    Rate NUMERIC(5,2),
+    ModeOfPayment VARCHAR(100),
     CONSTRAINT fk_user FOREIGN KEY(UserId) REFERENCES Users(UserId)
 );
 
@@ -39,4 +34,16 @@ SELECT U.UserName, to_char(StartDate, 'DD-MMM-YYYY') AS StartDate, to_char(EndDa
 FROM UserTransactions T 
 INNER JOIN Users U ON T.UserId = U.UserId;
 
-select principal, cast(principal as money) from UserTransactions;
+SELECT principal, cast(principal as money) FROM UserTransactions;
+
+SELECT CASE WHEN (CURRENT_DATE - enddate) > 0 THEN (CURRENT_DATE - enddate) ELSE '' END AS Overdue FROM UserTransactions;
+
+SELECT TransactionId, U.UserName, to_char(StartDate, 'DD Month YYYY') AS StartDate, 
+to_char(EndDate, 'DD Month YYYY') AS EndDate,
+TO_CHAR(Principal, '99G99G999') AS Principal,
+TO_CHAR(Interest, '99G99G999')AS Interest, Rate,
+Duration_in_months as Duration,
+CASE WHEN (CURRENT_DATE - enddate) > 0 THEN (CURRENT_DATE - enddate) ELSE NULL END AS Overdue
+FROM UserTransactions T INNER JOIN Users U ON T.UserId = U.UserId;
+
+-- DROP TABLE UserTransactions; DROP TABLE Users;

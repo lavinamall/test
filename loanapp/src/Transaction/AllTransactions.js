@@ -39,7 +39,7 @@ function AllTransactions() {
               </tr>
               <tr>
                 <td>
-                  <span className="label">Mode:</span> Cash
+                  <span className="label">Mode:</span> {transaction.mode}
                 </td>
                 <td>
                   <span className="label">Month:</span> {transaction.duration}
@@ -48,6 +48,7 @@ function AllTransactions() {
               <tr>
                 <td>
                   <span className="label">Overdue:</span>
+                  {transaction.overdue} day(s)
                 </td>
                 <td>
                   <span className="label">Rate:</span> {transaction.rate}%

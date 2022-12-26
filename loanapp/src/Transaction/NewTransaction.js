@@ -1,25 +1,30 @@
 import "react-datepicker/dist/react-datepicker.css";
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { getAllUsers } from "../Functions.js";
 import DatePicker from "react-datepicker";
 import { URL } from "../Constants.js";
 
 function NewTransaction() {
+  const url = URL + "/NewTransaction";
+  const navigate = useNavigate();
   const [users, setUsers] = useState([]);
   const [startDate, setStartDate] = useState(new Date());
-  const [formData, setFormData] = useState({});
-
-  const url = URL + "/NewTransaction";
+  const [formData, setFormData] = useState({ startDate: startDate });
 
   const handleChange = (event) => {
     const name = event.target.name;
     const value = event.target.value;
-    setFormData((values) => ({ ...values, [name]: value }));
+    setFormData((values) => ({
+      ...values,
+      [name]: value,
+    }));
     console.log(formData);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log(formData);
     try {
       let res = await fetch(url, {
         method: "POST",
@@ -28,12 +33,15 @@ function NewTransaction() {
       });
       if (res.status === 200) {
         console.log("Success");
+        alert("Transaction Added!");
       } else {
         console.log("Error");
+        alert("ERROR!");
       }
     } catch (err) {
       console.error(err.message);
     }
+    navigate("/", { replace: true });
   };
 
   useEffect(() => {
@@ -47,7 +55,7 @@ function NewTransaction() {
   return (
     <div className="container">
       <div className="pageHeader">New Transaction</div>
-      <form className="border" onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit}>
         <div className="input-group mb-3">
           <div className="input-group-prepend">
             <span className="input-group-text">Client</span>
@@ -55,9 +63,12 @@ function NewTransaction() {
           <select
             className="custom-select"
             onChange={handleChange}
-            placeholder="Choose Client"
+            defaultValue={0}
             name="UserId"
+            autoFocus
+            required
           >
+            <option key="0">Client</option>
             {users.map((user) => (
               <option key={user.userid} value={user.userid}>
                 {user.username}
@@ -72,11 +83,12 @@ function NewTransaction() {
             <span className="input-group-text">Amount</span>
           </div>
           <input
-            type="number"
-            min="0"
             className="form-control"
-            name="Amount"
             onChange={handleChange}
+            name="Amount"
+            type="number"
+            required
+            min="0"
           />
           <div className="input-group-append">
             <span className="input-group-text">.00</span>
@@ -89,10 +101,10 @@ function NewTransaction() {
           </div>
           <input
             className="form-control"
-            type="number"
-            min="0"
-            name="Rate"
             onChange={handleChange}
+            type="decimal"
+            name="Rate"
+            min="0"
           />
           <div className="input-group-append">
             <span className="input-group-text">%</span>
@@ -104,28 +116,44 @@ function NewTransaction() {
             <span className="input-group-text">Months</span>
           </div>
           <input
-            type="text"
             className="form-control"
-            name="Month"
-            min="1"
             onChange={handleChange}
+            name="Month"
+            type="text"
+            required
+            min="1"
           />
         </div>
 
         <div className="input-group mb-3">
           <div className="input-group-append">
-            <span className="input-group-text">Start Date</span>
-            <DatePicker
-              className="form-control"
-              selected={startDate}
-              onChange={(date) => setStartDate(date)}
-            />
+            <span className="input-group-text">Mode</span>
           </div>
+          <input
+            placeholder="Cash or Bank"
+            className="form-control"
+            onChange={handleChange}
+            name="Mode"
+            type="text"
+          />
+        </div>
+
+        <div className="input-group mb-3">
+          <DatePicker
+            dateFormat="d MMMM y h:mm aa"
+            className="form-control"
+            selected={startDate}
+            onChange={(date) => {
+              setStartDate(date);
+              setFormData({ ...formData, startDate: date });
+            }}
+            name="startDate"
+          />
         </div>
 
         <div className="d-flex justify-content-center">
           <button type="submit" className="btn btn-primary">
-            Submit
+            Add
           </button>
         </div>
       </form>
