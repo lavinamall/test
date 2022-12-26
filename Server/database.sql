@@ -1,7 +1,5 @@
 CREATE DATABASE LoanShark;
 
-̀
-
 SELECT * FROM Users;
 SELECT * FROM Users ORDER BY UserName ASC;
 

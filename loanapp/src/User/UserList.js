@@ -1,20 +1,38 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { getAllUsers } from "../Functions.js";
 import "../CSS/App.css";
 
 function UserList() {
   const [users, setUsers] = useState([]);
+  const navigate = useNavigate();
+
+  const buttonRedirect = () => {
+    navigate("/NewUser", { replace: true });
+  }
 
   useEffect(() => {
     const getUsers = async () => {
-      setUsers(await getAllUsers())
+      setUsers(await getAllUsers());
     };
     getUsers();
   }, []);
 
   return (
     <div>
-      <div className="pageHeader">Client List</div>
+      <div className="pageHeader input-group justify-content-center">
+        Client List
+        <div className="ml-5">
+          <button
+            type="submit"
+            className="btn btn-light"
+            onClick={buttonRedirect}
+          >
+            Add New Client
+          </button>
+        </div>
+      </div>
+
       {users.map((user) => (
         <div className="UserCard" key={user.userid}>
           <div className="card">
